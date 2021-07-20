@@ -13,7 +13,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @AttributeOverride(name = "id", column = @Column(name = "PRODUCT_CATEGORY_ID"))
-public class ProductCategory  extends BaseEntity<Long>{
+public class ProductCategory extends BaseEntity<Long> {
     @Column(name = "NAME")
     private String name;
 

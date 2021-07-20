@@ -17,7 +17,7 @@ import java.util.List;
 public class Order extends BaseEntity<Long> {
 
     @ManyToOne
-    @JoinColumn(name = "SHIPPED_FROM", referencedColumnName = "LOCATION_ID" )
+    @JoinColumn(name = "SHIPPED_FROM", referencedColumnName = "LOCATION_ID")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Location shippedFrom;

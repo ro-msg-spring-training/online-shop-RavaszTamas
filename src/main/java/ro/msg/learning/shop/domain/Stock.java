@@ -12,7 +12,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @AttributeOverride(name = "id", column = @Column(name = "STOCK_ID"))
-public class Stock extends BaseEntity<Long>{
+public class Stock extends BaseEntity<Long> {
 
     @ManyToOne
     @JoinColumn(name = "PRODUCT_ID", insertable = false, updatable = false)

@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Setter
 @ToString(callSuper = true)
 @AttributeOverride(name = "id", column = @Column(name = "REVENUE_ID"))
-public class Revenue extends BaseEntity<Long>{
+public class Revenue extends BaseEntity<Long> {
 
     @ManyToOne
     @JoinColumn(name = "LOCATION_ID", insertable = false, updatable = false)

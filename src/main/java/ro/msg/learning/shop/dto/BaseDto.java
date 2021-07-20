@@ -3,6 +3,7 @@ package ro.msg.learning.shop.dto;
 import lombok.*;
 
 import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

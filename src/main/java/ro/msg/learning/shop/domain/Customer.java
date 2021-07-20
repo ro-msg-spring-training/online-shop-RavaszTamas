@@ -33,6 +33,6 @@ public class Customer extends BaseEntity<Long> {
     @OneToMany(mappedBy = "customer", orphanRemoval = true)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private  List<Order> orderList;
+    private List<Order> orderList;
 
 }
