@@ -1,9 +1,6 @@
 package ro.msg.learning.shop.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -13,14 +10,17 @@ import java.io.Serializable;
 @Setter
 @EqualsAndHashCode
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class Address implements Serializable {
 
-    private String Country;
+    private String country;
 
-    private String City;
+    private String city;
 
-    private String County;
+    private String county;
 
-    private String StreetAddress;
+    private String streetAddress;
 
 }

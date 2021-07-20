@@ -14,6 +14,9 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @AttributeOverride(name = "id", column = @Column(name = "ORDER_ID"))
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Order extends BaseEntity<Long> {
 
     @ManyToOne

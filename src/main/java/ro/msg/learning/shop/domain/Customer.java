@@ -13,6 +13,9 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @AttributeOverride(name = "id", column = @Column(name = "CUSTOMER_ID"))
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Customer extends BaseEntity<Long> {
 
     @Column(name = "FIRSTNAME")
@@ -30,7 +33,7 @@ public class Customer extends BaseEntity<Long> {
     @Column(name = "EMAIL_ADDRESS")
     private String emailAddress;
 
-    @OneToMany(mappedBy = "customer", orphanRemoval = true)
+    @OneToMany(mappedBy = "customer", orphanRemoval = true, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<Order> orderList;

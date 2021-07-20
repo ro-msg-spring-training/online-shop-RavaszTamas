@@ -12,13 +12,16 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @AttributeOverride(name = "id", column = @Column(name = "STOCK_ID"))
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Stock extends BaseEntity<Long> {
 
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_ID", insertable = false, updatable = false)
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "LOCATION_ID", insertable = false, updatable = false)
     private Location location;
 

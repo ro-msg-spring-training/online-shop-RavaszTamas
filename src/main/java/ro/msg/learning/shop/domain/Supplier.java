@@ -7,6 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "SUPPLIER")
+@NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
@@ -20,7 +21,7 @@ public class Supplier extends BaseEntity<Long> {
     @Column(name = "NAME")
     private String name;
 
-    @OneToMany(mappedBy = "supplier", orphanRemoval = true)
+    @OneToMany(mappedBy = "supplier", orphanRemoval = true, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<Product> productList;

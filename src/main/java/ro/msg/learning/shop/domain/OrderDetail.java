@@ -14,14 +14,15 @@ import javax.persistence.*;
 @Setter
 @ToString(callSuper = true)
 @AttributeOverride(name = "id", column = @Column(name = "ORDER_DETAIL_ID"))
+@NoArgsConstructor
 public class OrderDetail extends BaseEntity<Long> {
 
-    @ManyToOne
-    @JoinColumn(name = "ORDER_ID", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORDER_ID")
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "PRODUCT_ID", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "PRODUCT_ID")
     private Product product;
 
     @Column(name = "QUANTITY")

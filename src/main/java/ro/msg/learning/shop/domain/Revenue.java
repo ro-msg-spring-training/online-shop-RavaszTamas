@@ -8,6 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "REVENUE")
+@NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
@@ -18,7 +19,7 @@ import java.time.LocalDate;
 @AttributeOverride(name = "id", column = @Column(name = "REVENUE_ID"))
 public class Revenue extends BaseEntity<Long> {
 
-    @ManyToOne
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "LOCATION_ID", insertable = false, updatable = false)
     private Location location;
 

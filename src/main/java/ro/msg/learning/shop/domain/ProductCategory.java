@@ -10,9 +10,12 @@ import java.util.List;
 @Table(name = "PRODUCT_CATEGORY")
 @Getter
 @Setter
+@Builder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @AttributeOverride(name = "id", column = @Column(name = "PRODUCT_CATEGORY_ID"))
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductCategory extends BaseEntity<Long> {
     @Column(name = "NAME")
     private String name;
@@ -20,7 +23,7 @@ public class ProductCategory extends BaseEntity<Long> {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @OneToMany(mappedBy = "productCategory", orphanRemoval = true)
+    @OneToMany(mappedBy = "productCategory", orphanRemoval = true, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private List<Product> productList;
