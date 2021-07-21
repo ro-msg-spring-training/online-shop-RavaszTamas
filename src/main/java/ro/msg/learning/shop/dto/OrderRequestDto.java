@@ -17,5 +17,6 @@ public class OrderRequestDto {
     Timestamp timestamp;
     Long customerId;
     Address address;
+    @ToString.Exclude
     List<ProductIdWithQuantity> orderedItems;
 }

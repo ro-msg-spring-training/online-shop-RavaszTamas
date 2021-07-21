@@ -20,7 +20,7 @@ import java.time.LocalDate;
 public class Revenue extends BaseEntity<Long> {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "LOCATION_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "LOCATION_ID")
     private Location location;
 
     @Column(name = "DATE_RECORDED")

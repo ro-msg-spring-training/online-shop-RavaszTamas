@@ -12,7 +12,7 @@ import java.io.Serializable;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Builder
 public class Address implements Serializable {
 
     private String country;

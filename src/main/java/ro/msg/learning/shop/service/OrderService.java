@@ -16,4 +16,6 @@ public interface OrderService {
 
 
     Order addOrder(OrderRequestDto orderRequestDto, List<StockToTake> resultingItems);
+
+    Order createNewOrder(OrderDeliveryStrategy strategy, OrderRequestDto orderRequestDto);
 }

@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 
 public class SingleLocationOrderDelivery implements OrderDeliveryStrategy {
     @Override
-    public List<StockToTake> getListOfStocksToBeFound(List<Location> initialStock, OrderRequestDto orderRequestDto) throws OrderException {
-        Optional<Location> locationOptional = initialStock.stream().filter(location -> {
+    public List<StockToTake> getListOfStocksToBeFound(List<Location> allLocations, OrderRequestDto orderRequestDto) throws OrderException {
+        Optional<Location> locationOptional = allLocations.stream().filter(location -> {
             List<Stock> myStocks = location.getStockList();
             for (var order : orderRequestDto.getOrderedItems()) {
 

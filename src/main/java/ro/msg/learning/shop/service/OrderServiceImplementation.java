@@ -32,9 +32,6 @@ public class OrderServiceImplementation implements OrderService {
 
         List<Location> locations = locationRepository.findAll();
 
-//        if (locations.size() != orderRequestDto.getOrderedItems().size())
-//            throw new ResourceNotFoundException("No single location found!");
-
         return strategy.getListOfStocksToBeFound(locations, orderRequestDto);
     }
 
@@ -75,6 +72,14 @@ public class OrderServiceImplementation implements OrderService {
         );
 
         return savedOrder;
+    }
+
+    @Override
+    public Order createNewOrder(OrderDeliveryStrategy strategy, OrderRequestDto orderRequestDto) {
+        List<StockToTake> resultingItems = searchForItemsByStrategy(strategy, orderRequestDto);
+        Order newOrder = addOrder(orderRequestDto, resultingItems);
+        adjustStock(resultingItems);
+        return newOrder;
     }
 
 

@@ -7,7 +7,7 @@ import ro.msg.learning.shop.domain.Order;
 import ro.msg.learning.shop.dto.OrderDto;
 
 @Component
-public class OrderConverter implements BaseConverter<Order, OrderDto>{
+public class OrderConverter implements BaseConverter<Order, OrderDto> {
     @Override
     public Order convertDtoToModel(OrderDto dto) {
 
@@ -15,7 +15,7 @@ public class OrderConverter implements BaseConverter<Order, OrderDto>{
         customer.setId(dto.getCustomerId());
         Location location = Location.builder().build();
         location.setId(dto.getShippedFromId());
-        Order order =  Order.builder()
+        Order order = Order.builder()
                 .address(dto.getAddress())
                 .createdAt(dto.getCreatedAt())
                 .customer(customer)

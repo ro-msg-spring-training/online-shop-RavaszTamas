@@ -18,11 +18,15 @@ import javax.persistence.*;
 public class Stock extends BaseEntity<Long> {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "PRODUCT_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "PRODUCT_ID")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Product product;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "LOCATION_ID", insertable = false, updatable = false)
+    @JoinColumn(name = "LOCATION_ID")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Location location;
 
     @Column(name = "QUANTITY")
