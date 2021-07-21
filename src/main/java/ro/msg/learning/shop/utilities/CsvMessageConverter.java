@@ -1,10 +1,12 @@
 package ro.msg.learning.shop.utilities;
 
 import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractGenericHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -19,16 +21,21 @@ import java.util.List;
 
 public class CsvMessageConverter<T> extends AbstractGenericHttpMessageConverter<T> {
 
-    public List<T> fromCsv(Class<T> type, InputStream inputCsv) {
+    public CsvMessageConverter()
+    {
+        super(MediaType.TEXT_EVENT_STREAM);
+    }
+
+    public List<T> fromCsv(Class<T> clazz, InputStream inputCsv) {
         CsvMapper mapper = new CsvMapper();
-        CsvSchema schema = mapper.schemaFor(type);
+        CsvSchema schema = mapper.schemaFor(clazz);
 
 
         List<T> result = new ArrayList<>();
 
         try {
 
-            MappingIterator<T> iterator = mapper.readerFor(type).with(schema).readValues(inputCsv);
+            MappingIterator<T> iterator = mapper.readerFor(clazz).with(schema).readValues(inputCsv);
 
             while (iterator.hasNextValue()) {
                 result.add(iterator.nextValue());
@@ -41,8 +48,16 @@ public class CsvMessageConverter<T> extends AbstractGenericHttpMessageConverter<
         return result;
     }
 
-    public void toCsv(Class<T> type, List<T> items, OutputStream outputCsv) {
+    public void toCsv(Class<T> clazz, List<T> items, OutputStream outputCsv) {
+        CsvMapper mapper = new CsvMapper();
+        CsvSchema schema = mapper.schemaFor(clazz);
 
+        ObjectWriter writer = mapper.writer(schema);
+        try {
+            writer.writeValue(outputCsv,items);
+        } catch (IOException e) {
+            throw new ConverstionException("Failed to convert objects to csv!");
+        }
     }
 
     @Override
