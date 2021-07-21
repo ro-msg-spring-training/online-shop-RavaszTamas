@@ -32,8 +32,8 @@ public class OrderServiceImplementation implements OrderService {
 
         List<Location> locations = locationRepository.findAll();
 
-        if (locations.size() != orderRequestDto.getOrderedItems().size())
-            throw new ResourceNotFoundException("No single location found!");
+//        if (locations.size() != orderRequestDto.getOrderedItems().size())
+//            throw new ResourceNotFoundException("No single location found!");
 
         return strategy.getListOfStocksToBeFound(locations, orderRequestDto);
     }
@@ -69,7 +69,7 @@ public class OrderServiceImplementation implements OrderService {
                 orderedItem -> {
                     Product product = Product.builder().build();
                     product.setId(orderedItem.getProductId());
-                    OrderDetail newOrderDetail = OrderDetail.builder().order(savedOrder).product(product).build();
+                    OrderDetail newOrderDetail = OrderDetail.builder().order(savedOrder).product(product).quantity(orderedItem.getQuantity()).build();
                     orderDetailRepository.save(newOrderDetail);
                 }
         );

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class OrderDto {
 
-    Long id;
+    Long orderId;
     Long shippedFromId;
     Long customerId;
     LocalDateTime createdAt;

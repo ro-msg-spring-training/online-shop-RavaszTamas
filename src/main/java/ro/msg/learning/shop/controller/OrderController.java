@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ro.msg.learning.shop.converter.Converter;
+import ro.msg.learning.shop.converter.OrderConverter;
+import ro.msg.learning.shop.domain.Order;
 import ro.msg.learning.shop.domain.helperdatastructures.StockToTake;
 import ro.msg.learning.shop.dto.OrderDto;
 import ro.msg.learning.shop.dto.OrderRequestDto;
@@ -26,6 +29,8 @@ public class OrderController {
     @Autowired
     private OrderDeliveryStrategy strategy;
 
+    @Autowired
+    private Converter<Order,OrderDto> orderConverter;
 
     @Autowired
     private OrderService service;
@@ -33,9 +38,9 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderDto> createOrder(@RequestBody OrderRequestDto orderRequestDto) {
         List<StockToTake> resultingItems = service.searchForItemsByStrategy(strategy, orderRequestDto);
+        Order newOrder = service.addOrder(orderRequestDto, resultingItems);
         service.adjustStock(resultingItems);
-        service.addOrder(orderRequestDto, resultingItems);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(orderConverter.convertModelToDto(newOrder));
     }
 
 }
