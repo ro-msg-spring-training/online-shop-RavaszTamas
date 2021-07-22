@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -67,18 +68,27 @@ public class OrderControllerSingleLocationIntegrationTests {
     @Autowired
     private StockRepository stockRepository;
 
+    Address testAddress;
 
     @Before
     public void setUp() throws Exception {
 
         mvc.perform(MockMvcRequestBuilders.post("/populate-data")).andExpect(status().isOk());
 
+        testAddress = Address
+                .builder()
+                .streetAddress("AnAddress 1")
+                .city("Cluj")
+                .county("Cluj")
+                .country("RO")
+                .build();
+
     }
 
     @After
     public void tearDown() throws Exception {
         mvc.perform(MockMvcRequestBuilders.delete("/populate-data")).andExpect(status().isOk());
-
+        testAddress = null;
     }
 
     @Test
@@ -96,13 +106,7 @@ public class OrderControllerSingleLocationIntegrationTests {
             mvc.perform(MockMvcRequestBuilders.post("/orders")
                     .content(asJsonString(OrderRequestDto
                             .builder()
-                            .address(Address
-                                    .builder()
-                                    .streetAddress("AnAddress 1")
-                                    .city("Cluj")
-                                    .county("Cluj")
-                                    .country("RO")
-                                    .build())
+                            .address(testAddress)
                             .customerId(customer.get().getId())
                             .timestamp(new Timestamp(System.currentTimeMillis()))
                             .orderedItems(requested)
@@ -113,8 +117,7 @@ public class OrderControllerSingleLocationIntegrationTests {
                     .andExpect(MockMvcResultMatchers.jsonPath("$.orderId").exists())
                     .andExpect(MockMvcResultMatchers.jsonPath("$.orderId").isNotEmpty());
 
-
-            stockRepository.findAll();
+            assertEquals(1, orderRepository.findAll().size());
 
         } else {
             throw new RuntimeException("Invalid data initialization!");
@@ -134,13 +137,7 @@ public class OrderControllerSingleLocationIntegrationTests {
             mvc.perform(MockMvcRequestBuilders.post("/orders")
                     .content(asJsonString(OrderRequestDto
                             .builder()
-                            .address(Address
-                                    .builder()
-                                    .streetAddress("AnAddress 1")
-                                    .city("Cluj")
-                                    .county("Cluj")
-                                    .country("RO")
-                                    .build())
+                            .address(testAddress)
                             .customerId(customer.get().getId())
                             .timestamp(new Timestamp(System.currentTimeMillis()))
                             .orderedItems(requested)
@@ -148,6 +145,8 @@ public class OrderControllerSingleLocationIntegrationTests {
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(mvcResult -> assertTrue(mvcResult.getResolvedException() instanceof OrderException))
                     .andExpect(status().isInternalServerError());
+
+            assertEquals(0, orderRepository.findAll().size());
 
         } else {
             throw new RuntimeException("Invalid data initialization!");

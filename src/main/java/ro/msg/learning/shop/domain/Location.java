@@ -16,6 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@NamedEntityGraph(
+        name = "locationWithStocks",
+        attributeNodes = @NamedAttributeNode(value = "stockList")
+)
 public class Location extends BaseEntity<Long> {
 
     @Column(name = "NAME")

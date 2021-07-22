@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -114,7 +115,7 @@ public class OrderControllerAbundantLocationIntegrationTests {
                     .andExpect(MockMvcResultMatchers.jsonPath("$.orderId").isNotEmpty());
 
 
-            stockRepository.findAll();
+            assertEquals(1, orderRepository.findAll().size());
 
         } else {
             throw new RuntimeException("Invalid data initialization!");
@@ -148,6 +149,7 @@ public class OrderControllerAbundantLocationIntegrationTests {
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(mvcResult -> assertTrue(mvcResult.getResolvedException() instanceof OrderException))
                     .andExpect(status().isInternalServerError());
+            assertEquals(0, orderRepository.findAll().size());
 
         } else {
             throw new RuntimeException("Invalid data initialization!");
