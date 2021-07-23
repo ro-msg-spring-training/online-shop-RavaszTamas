@@ -16,6 +16,11 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    public static final String ORDERS = "/orders";
+    public static final String H_2_CONSOLE = "/h2-console/**";
+    public static final String STOCKS = "/stocks";
+    public static final String LOGIN = "/login";
+    public static final String LOGIN_ERROR = "/login-error";
     @Autowired
     private MyBasicAuthenticationEntryPoint authenticationEntryPoint;
 
@@ -28,25 +33,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         if (securityType.equals("with-form"))
             httpSecurity
                     .authorizeRequests()
-                    .antMatchers("/stocks").permitAll()
-                    .antMatchers(HttpMethod.POST, "/orders").permitAll()
-                    .antMatchers(HttpMethod.GET, "/orders").permitAll()
-                    .antMatchers("/h2-console/**").permitAll()
+                    .antMatchers(STOCKS).permitAll()
+                    .antMatchers(HttpMethod.POST, ORDERS).permitAll()
+                    .antMatchers(HttpMethod.GET, ORDERS).permitAll()
+                    .antMatchers(H_2_CONSOLE).permitAll()
 //                    .antMatchers("/css/**","/index").permitAll()
 //                    .antMatchers("/user/**").hasRole("USER")
 //                    .antMatchers("/products/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
                     .and()
                     .formLogin()
-                    .loginPage("/login").failureUrl("/login-error");
+                    .loginPage(LOGIN).failureUrl(LOGIN_ERROR);
         else if (securityType.equals("with-basic"))
             httpSecurity.csrf().disable()
                     .authorizeRequests()
 //                .antMatchers("/").permitAll()
                     .antMatchers("/products").permitAll()
-                    .antMatchers(HttpMethod.POST, "/orders").permitAll()
-                    .antMatchers(HttpMethod.GET, "/orders").permitAll()
-                    .antMatchers("/h2-console/**").permitAll()
+                    .antMatchers(HttpMethod.POST, ORDERS).permitAll()
+                    .antMatchers(HttpMethod.GET, ORDERS).permitAll()
+                    .antMatchers(H_2_CONSOLE).permitAll()
 //                .antMatchers("/products/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
                     .and()
@@ -55,17 +60,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         else
             httpSecurity
                     .authorizeRequests()
-                    .antMatchers("/stocks").permitAll()
-                    .antMatchers(HttpMethod.POST, "/orders").permitAll()
-                    .antMatchers(HttpMethod.GET, "/orders").permitAll()
-                    .antMatchers("/h2-console/**").permitAll()
+                    .antMatchers(STOCKS).permitAll()
+                    .antMatchers(HttpMethod.POST, ORDERS).permitAll()
+                    .antMatchers(HttpMethod.GET, ORDERS).permitAll()
+                    .antMatchers(H_2_CONSOLE).permitAll()
 //                    .antMatchers("/css/**","/index").permitAll()
 //                    .antMatchers("/user/**").hasRole("USER")
 //                    .antMatchers("/products/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
                     .and()
                     .formLogin()
-                    .loginPage("/login").failureUrl("/login-error");
+                    .loginPage(LOGIN).failureUrl(LOGIN_ERROR);
 
         httpSecurity.headers().frameOptions().disable();
         httpSecurity.addFilterAfter(new CustomFilter(), BasicAuthenticationFilter.class);

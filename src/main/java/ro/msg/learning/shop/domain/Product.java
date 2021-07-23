@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.domain;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -10,10 +11,10 @@ import java.util.List;
 @Table(name = "PRODUCT")
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"productCategory", "supplier", "orderDetailList", "stockList"})
+@ToString(callSuper = true, exclude = {"productCategory", "supplier", "orderDetailList", "stockList"})
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @AttributeOverride(name = "id", column = @Column(name = "PRODUCT_ID"))
@@ -37,25 +38,17 @@ public class Product extends BaseEntity<Long> {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_CATEGORY_ID")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private ProductCategory productCategory;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "SUPPLIER_ID")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private Supplier supplier;
 
     @OneToMany(mappedBy = "product", orphanRemoval = true, fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private List<OrderDetail> orderDetailList;
 
 
     @OneToMany(mappedBy = "product", orphanRemoval = true, fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private List<Stock> stockList;
 
 }

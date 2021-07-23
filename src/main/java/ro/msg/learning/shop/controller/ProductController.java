@@ -1,9 +1,10 @@
 package ro.msg.learning.shop.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ro.msg.learning.shop.converter.ProductConverter;
+import ro.msg.learning.shop.converter.BaseConverter;
+import ro.msg.learning.shop.domain.Product;
 import ro.msg.learning.shop.dto.ProductDto;
 import ro.msg.learning.shop.service.ProductService;
 
@@ -11,12 +12,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
+@AllArgsConstructor
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
-    @Autowired
-    private ProductConverter productConverter;
+    private final ProductService productService;
+    private final BaseConverter<Product, ProductDto> productConverter;
 
     @GetMapping
     public ResponseEntity<List<ProductDto>> getProducts() {

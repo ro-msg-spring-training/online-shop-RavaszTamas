@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -19,12 +18,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.util.NestedServletException;
 import ro.msg.learning.shop.domain.*;
 import ro.msg.learning.shop.dto.OrderRequestDto;
-import ro.msg.learning.shop.dto.ProductIdWithQuantity;
+import ro.msg.learning.shop.dto.ProductIdWithQuantityDto;
 import ro.msg.learning.shop.exceptions.OrderException;
 import ro.msg.learning.shop.repository.*;
 import ro.msg.learning.shop.service.OrderService;
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
@@ -97,16 +95,19 @@ public class OrderControllerSingleLocationIntegrationTests {
         Optional<Customer> customer = customerRepository.findAll().stream().findFirst();
         List<Product> productList = productRepository.findAll();
         if (customer.isPresent()) {
-            List<ProductIdWithQuantity> requested = productList.stream()
+            List<ProductIdWithQuantityDto> requested = productList.stream()
                     .filter(item -> item.getName().equals("Product 1") || item.getName().equals("Product 2"))
 //                    .filter(item -> item.getName().equals("Product 1"))
-                    .map(item -> ProductIdWithQuantity.builder().productId(item.getId()).quantity(10).build())
+                    .map(item -> ProductIdWithQuantityDto.builder().productId(item.getId()).quantity(10).build())
                     .collect(Collectors.toList());
 
             mvc.perform(MockMvcRequestBuilders.post("/orders")
                     .content(asJsonString(OrderRequestDto
                             .builder()
-                            .address(testAddress)
+                            .streetAddress(testAddress.getStreetAddress())
+                            .city(testAddress.getCity())
+                            .country(testAddress.getCountry())
+                            .county(testAddress.getCounty())
                             .customerId(customer.get().getId())
                             .timestamp(new Timestamp(System.currentTimeMillis()))
                             .orderedItems(requested)
@@ -129,15 +130,18 @@ public class OrderControllerSingleLocationIntegrationTests {
         Optional<Customer> customer = customerRepository.findAll().stream().findFirst();
         List<Product> productList = productRepository.findAll();
         if (customer.isPresent()) {
-            List<ProductIdWithQuantity> requested = productList.stream()
+            List<ProductIdWithQuantityDto> requested = productList.stream()
                     .filter(item -> item.getName().equals("Product 1") || item.getName().equals("Product 5"))
-                    .map(item -> ProductIdWithQuantity.builder().productId(item.getId()).quantity(10).build())
+                    .map(item -> ProductIdWithQuantityDto.builder().productId(item.getId()).quantity(10).build())
                     .collect(Collectors.toList());
 
             mvc.perform(MockMvcRequestBuilders.post("/orders")
                     .content(asJsonString(OrderRequestDto
                             .builder()
-                            .address(testAddress)
+                            .streetAddress(testAddress.getStreetAddress())
+                            .city(testAddress.getCity())
+                            .country(testAddress.getCountry())
+                            .county(testAddress.getCounty())
                             .customerId(customer.get().getId())
                             .timestamp(new Timestamp(System.currentTimeMillis()))
                             .orderedItems(requested)

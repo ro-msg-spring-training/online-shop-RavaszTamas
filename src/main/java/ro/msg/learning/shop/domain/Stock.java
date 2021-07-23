@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.domain;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
@@ -9,24 +10,20 @@ import javax.persistence.*;
 @Table(name = "STOCK")
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"location", "product"})
+@ToString(callSuper = true, exclude = {"location", "product"})
 @AttributeOverride(name = "id", column = @Column(name = "STOCK_ID"))
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Stock extends BaseEntity<Long> {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "PRODUCT_ID")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private Product product;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "LOCATION_ID")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private Location location;
 
     @Column(name = "QUANTITY")

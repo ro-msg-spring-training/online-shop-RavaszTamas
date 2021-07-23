@@ -1,7 +1,6 @@
 package ro.msg.learning.shop.dto;
 
 import lombok.*;
-import ro.msg.learning.shop.domain.Address;
 
 import java.time.LocalDateTime;
 
@@ -13,10 +12,13 @@ import java.time.LocalDateTime;
 @Builder
 public class OrderDto {
 
-    Long orderId;
-    Long shippedFromId;
-    Long customerId;
-    LocalDateTime createdAt;
-    Address address;
+    private Long orderId;
+    private Long shippedFromId;
+    private Long customerId;
+    private LocalDateTime createdAt;
+    private String country;
+    private String county;
+    private String streetAddress;
+    private String city;
 
 }

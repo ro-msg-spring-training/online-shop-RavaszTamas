@@ -1,9 +1,7 @@
 package ro.msg.learning.shop;
 
 
-import org.hibernate.Hibernate;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ro.msg.learning.shop.domain.*;
 import ro.msg.learning.shop.dto.OrderRequestDto;
-import ro.msg.learning.shop.dto.ProductIdWithQuantity;
+import ro.msg.learning.shop.dto.ProductIdWithQuantityDto;
 import ro.msg.learning.shop.exceptions.OrderException;
 import ro.msg.learning.shop.repository.CustomerRepository;
 import ro.msg.learning.shop.repository.LocationRepository;
@@ -29,13 +27,12 @@ import ro.msg.learning.shop.service.strategies.MostAbundantOrderDeliveryStrategy
 import ro.msg.learning.shop.service.strategies.OrderDeliveryStrategy;
 import ro.msg.learning.shop.service.strategies.SingleLocationOrderDelivery;
 
-import javax.transaction.Transactional;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -60,7 +57,6 @@ public class StrategyUnitTests {
     private CustomerRepository customerRepository;
     @Autowired
     private StockRepository stockRepository;
-
     Address testAddress = Address
             .builder()
             .streetAddress("AnAddress 1")
@@ -84,121 +80,130 @@ public class StrategyUnitTests {
     @Test
     public void whenRequestingOrderFromSingleLocation_thenLocationIsFound() {
 
-        OrderDeliveryStrategy strategy = new SingleLocationOrderDelivery();
+        OrderDeliveryStrategy strategy = new SingleLocationOrderDelivery(locationRepository);
 
-        List<Location> locationList = locationRepository.findAllWithStocks();
 
         Optional<Customer> customer = customerRepository.findAll().stream().findFirst();
 
         List<Product> productList = productRepository.findAll();
 
         if (customer.isPresent()) {
-            List<ProductIdWithQuantity> requested = productList.stream()
+            List<ProductIdWithQuantityDto> requested = productList.stream()
                     .filter(item -> item.getName().equals("Product 1") || item.getName().equals("Product 2"))
-                    .map(item -> ProductIdWithQuantity.builder().productId(item.getId()).quantity(10).build())
+                    .map(item -> ProductIdWithQuantityDto.builder().productId(item.getId()).quantity(10).build())
                     .collect(Collectors.toList());
 
             OrderRequestDto orderRequestDto = OrderRequestDto
                     .builder()
                     .timestamp(new Timestamp(System.currentTimeMillis()))
                     .customerId(customer.get().getId())
-                    .address(testAddress)
+                    .streetAddress(testAddress.getStreetAddress())
+                    .city(testAddress.getCity())
+                    .country(testAddress.getCountry())
+                    .county(testAddress.getCounty())
                     .orderedItems(requested)
                     .build();
 
-            Assertions.assertDoesNotThrow(()->{strategy.getListOfStocksToBeFound(locationList,orderRequestDto);});
+            Assertions.assertDoesNotThrow(()->{strategy.getListOfStocksToBeFound(orderRequestDto);});
         } else {
-            throw new RuntimeException("Invalid data initialization!");
+            fail();
         }
     }
     @Test
     public void whenRequestingOrderFromSingleLocation_thenLocationIsNotFound() {
 
-        OrderDeliveryStrategy strategy = new SingleLocationOrderDelivery();
+        OrderDeliveryStrategy strategy = new SingleLocationOrderDelivery(locationRepository);
 
-        List<Location> locationList = locationRepository.findAllWithStocks();
 
         Optional<Customer> customer = customerRepository.findAll().stream().findFirst();
 
         List<Product> productList = productRepository.findAll();
 
         if (customer.isPresent()) {
-            List<ProductIdWithQuantity> requested = productList.stream()
+            List<ProductIdWithQuantityDto> requested = productList.stream()
                     .filter(item -> item.getName().equals("Product 1") || item.getName().equals("Product 4"))
-                    .map(item -> ProductIdWithQuantity.builder().productId(item.getId()).quantity(10).build())
+                    .map(item -> ProductIdWithQuantityDto.builder().productId(item.getId()).quantity(10).build())
                     .collect(Collectors.toList());
 
             OrderRequestDto orderRequestDto = OrderRequestDto
                     .builder()
                     .timestamp(new Timestamp(System.currentTimeMillis()))
                     .customerId(customer.get().getId())
-                    .address(testAddress)
+                    .streetAddress(testAddress.getStreetAddress())
+                    .city(testAddress.getCity())
+                    .country(testAddress.getCountry())
+                    .county(testAddress.getCounty())
                     .orderedItems(requested)
                     .build();
 
-            Assertions.assertThrows(OrderException.class,()-> strategy.getListOfStocksToBeFound(locationList,orderRequestDto));
+            Assertions.assertThrows(OrderException.class,()-> strategy.getListOfStocksToBeFound(orderRequestDto));
         } else {
-            throw new RuntimeException("Invalid data initialization!");
+            fail();
         }
     }
     @Test
     public void whenRequestingOrderFromAbundantLocation_thenLocationIsFound() {
 
-        OrderDeliveryStrategy strategy = new MostAbundantOrderDeliveryStrategy();
+        OrderDeliveryStrategy strategy = new MostAbundantOrderDeliveryStrategy(stockRepository);
 
-        List<Location> locationList = locationRepository.findAllWithStocks();
 
         Optional<Customer> customer = customerRepository.findAll().stream().findFirst();
 
         List<Product> productList = productRepository.findAll();
 
         if (customer.isPresent()) {
-            List<ProductIdWithQuantity> requested = productList.stream()
+            List<ProductIdWithQuantityDto> requested = productList.stream()
                     .filter(item -> item.getName().equals("Product 1") || item.getName().equals("Product 2"))
-                    .map(item -> ProductIdWithQuantity.builder().productId(item.getId()).quantity(10).build())
+                    .map(item -> ProductIdWithQuantityDto.builder().productId(item.getId()).quantity(10).build())
                     .collect(Collectors.toList());
 
             OrderRequestDto orderRequestDto = OrderRequestDto
                     .builder()
                     .timestamp(new Timestamp(System.currentTimeMillis()))
                     .customerId(customer.get().getId())
-                    .address(testAddress)
+                    .streetAddress(testAddress.getStreetAddress())
+                    .city(testAddress.getCity())
+                    .country(testAddress.getCountry())
+                    .county(testAddress.getCounty())
                     .orderedItems(requested)
                     .build();
 
-            Assertions.assertDoesNotThrow(()->{strategy.getListOfStocksToBeFound(locationList,orderRequestDto);});
+            Assertions.assertDoesNotThrow(()->
+            {strategy.getListOfStocksToBeFound(orderRequestDto);});
         } else {
-            throw new RuntimeException("Invalid data initialization!");
+            fail();
         }
     }
     @Test
     public void whenRequestingOrderFromAbundantLocation_thenLocationIsNotFound() {
 
-        OrderDeliveryStrategy strategy = new SingleLocationOrderDelivery();
+        OrderDeliveryStrategy strategy = new MostAbundantOrderDeliveryStrategy(stockRepository);
 
-        List<Location> locationList = locationRepository.findAllWithStocks();
 
         Optional<Customer> customer = customerRepository.findAll().stream().findFirst();
 
         List<Product> productList = productRepository.findAll();
 
         if (customer.isPresent()) {
-            List<ProductIdWithQuantity> requested = productList.stream()
+            List<ProductIdWithQuantityDto> requested = productList.stream()
                     .filter(item -> item.getName().equals("Product 1") || item.getName().equals("Product 5"))
-                    .map(item -> ProductIdWithQuantity.builder().productId(item.getId()).quantity(10).build())
+                    .map(item -> ProductIdWithQuantityDto.builder().productId(item.getId()).quantity(10).build())
                     .collect(Collectors.toList());
 
             OrderRequestDto orderRequestDto = OrderRequestDto
                     .builder()
                     .timestamp(new Timestamp(System.currentTimeMillis()))
                     .customerId(customer.get().getId())
-                    .address(testAddress)
+                    .streetAddress(testAddress.getStreetAddress())
+                    .city(testAddress.getCity())
+                    .country(testAddress.getCountry())
+                    .county(testAddress.getCounty())
                     .orderedItems(requested)
                     .build();
 
-            Assertions.assertThrows(OrderException.class,()-> strategy.getListOfStocksToBeFound(locationList,orderRequestDto));
+            Assertions.assertThrows(OrderException.class,()-> strategy.getListOfStocksToBeFound(orderRequestDto));
         } else {
-            throw new RuntimeException("Invalid data initialization!");
+            fail();
         }
     }
 

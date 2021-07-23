@@ -1,6 +1,6 @@
 package ro.msg.learning.shop.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,13 +13,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/stocks")
+@AllArgsConstructor
 public class StockController {
 
-    @Autowired
-    StockService stockService;
+    private final StockService stockService;
 
-    @Autowired
-    BaseConverter<Stock, StockDto> stockDtoConverter;
+    private final BaseConverter<Stock, StockDto> stockDtoConverter;
 
     @GetMapping
     public List<StockDto> getAllStocks() {

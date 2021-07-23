@@ -15,16 +15,12 @@ public class MailConfiguration {
 
     @Value("${spring.mail.host}")
     String host;
-    @Value("${spring.mail.port}")
+    @Value("${spring.mail.properties.mail.smtp.port}")
     Integer port;
     @Value("${spring.mail.username}")
     String username;
     @Value("${spring.mail.password}")
     String password;
-    @Value("${spring.mail.properties.mail.smtp.auth}")
-    String auth;
-    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
-    String ssl;
 
     @Bean
     public JavaMailSender getJavaMailSender() {
@@ -32,24 +28,28 @@ public class MailConfiguration {
         mailSender.setHost(host);
         mailSender.setPort(port);
 
-        mailSender.setUsername("ravaszt88@gmail.com");
-        mailSender.setPassword("password");
+        mailSender.setUsername(username);
+        mailSender.setPassword(password);
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.starttls.enable", "false");
         props.put("mail.debug", "true");
-        props.put("mail.smtp.ssl.trust", "smtp.mailtrap.io");
 
 
         return mailSender;
     }
 
+
+    @Value("${mail.template.subject}")
+    String subject;
+
     @Bean
     public SimpleMailMessage templateMessage() {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setText("Template text: %s");
+        message.setText("Dear #{ #user } we would like to inform you that we have successfully processed your order. #{ #year } #{ #month } #{ #day }");
+        message.setSubject(subject);
         return message;
     }
 }

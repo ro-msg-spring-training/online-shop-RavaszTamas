@@ -8,7 +8,7 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 @Builder
-public class ProductIdWithQuantity {
+public class ProductIdWithQuantityDto {
     private Long productId;
     private Integer quantity;
 }

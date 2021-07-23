@@ -1,11 +1,10 @@
 package ro.msg.learning.shop.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ro.msg.learning.shop.domain.Product;
 import ro.msg.learning.shop.exceptions.ResourceNotFoundException;
 import ro.msg.learning.shop.exceptions.ValidatorException;
-import ro.msg.learning.shop.repository.ProductCategoryRepository;
 import ro.msg.learning.shop.repository.ProductRepository;
 import ro.msg.learning.shop.service.validators.Validator;
 
@@ -13,14 +12,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class ProductServiceImplementation implements ProductService {
 
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private ProductCategoryRepository productCategoryRepository;
-    @Autowired
-    Validator<Product> productValidator;
+    private final ProductRepository productRepository;
+    private final Validator<Product> productValidator;
 
     @Override
     public List<Product> findAll() {
@@ -29,11 +25,11 @@ public class ProductServiceImplementation implements ProductService {
 
     @Override
     public Product findById(Long productId) {
-        Optional<Product> byId = productRepository.findById(productId);
-        if (byId.isEmpty())
+        if (productId == null)
+            throw new ResourceNotFoundException("Id must not be null!");
+        return productRepository.findById(productId).orElseThrow(() -> {
             throw new ResourceNotFoundException("Product doesn't exist");
-        return byId.get();
-
+        });
     }
 
     @Override

@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.domain;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,12 +11,12 @@ import java.util.List;
 @Table(name = "CUSTOMER")
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = {"orderList"})
+@ToString(callSuper = true, exclude = {"orderList"})
 @AttributeOverride(name = "id", column = @Column(name = "CUSTOMER_ID"))
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Customer extends BaseEntity<Long> {
 
     @Column(name = "FIRSTNAME")
@@ -34,8 +35,6 @@ public class Customer extends BaseEntity<Long> {
     private String emailAddress;
 
     @OneToMany(mappedBy = "customer", orphanRemoval = true, fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     private List<Order> orderList;
 
 }

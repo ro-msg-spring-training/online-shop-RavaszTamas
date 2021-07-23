@@ -1,8 +1,6 @@
 package ro.msg.learning.shop.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,22 +21,18 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/orders")
+@AllArgsConstructor
 public class OrderController {
 
-    public static final Logger logger = LoggerFactory.getLogger(OrderController.class);
+    private final OrderDeliveryStrategy strategy;
 
-    @Autowired
-    private OrderDeliveryStrategy strategy;
-    @Autowired
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
-    @Autowired
-    private Converter<Order, OrderDto> orderConverter;
+    private final Converter<Order, OrderDto> orderConverter;
 
-    @Autowired
-    private OrderService orderService;
-    @Autowired
-    private EmailService emailService;
+    private final OrderService orderService;
+
+    private final EmailService emailService;
 
     @PostMapping
     public ResponseEntity<OrderDto> createOrder(@RequestBody OrderRequestDto orderRequestDto) {
@@ -46,7 +40,7 @@ public class OrderController {
         Order newOrder;
         if (customerOptional.isPresent()) {
             newOrder = orderService.createNewOrder(strategy, orderRequestDto);
-            emailService.sendSimpleMessage(customerOptional.get().getEmailAddress(), "test subject", "test text");
+            emailService.sendOrderConfirmationMessage(customerOptional.get(),newOrder);
         } else
             throw new OrderException("Customer doesn't exists!");
         return ResponseEntity.ok(orderConverter.convertModelToDto(newOrder));

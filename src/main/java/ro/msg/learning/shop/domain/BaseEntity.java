@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.domain;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,8 +16,9 @@ import java.io.Serializable;
 @ToString
 @Getter
 @Setter
-public abstract class BaseEntity<ID extends Serializable> implements Serializable {
+@SuperBuilder
+public class BaseEntity<I extends Serializable> implements Serializable {
     @Id
     @GeneratedValue
-    private ID id;
+    protected I id;
 }

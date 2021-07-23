@@ -1,6 +1,7 @@
 package ro.msg.learning.shop.converter;
 
 import org.springframework.stereotype.Component;
+import ro.msg.learning.shop.domain.Address;
 import ro.msg.learning.shop.domain.Customer;
 import ro.msg.learning.shop.domain.Location;
 import ro.msg.learning.shop.domain.Order;
@@ -15,20 +16,27 @@ public class OrderConverter implements BaseConverter<Order, OrderDto> {
         customer.setId(dto.getCustomerId());
         Location location = Location.builder().build();
         location.setId(dto.getShippedFromId());
-        Order order = Order.builder()
-                .address(dto.getAddress())
+        return Order.builder()
+                .address(Address.builder()
+                        .streetAddress(dto.getStreetAddress())
+                        .county(dto.getCounty())
+                        .country(dto.getCountry())
+                        .city(dto.getCity())
+                        .build())
+                .id(dto.getOrderId())
                 .createdAt(dto.getCreatedAt())
                 .customer(customer)
                 .shippedFrom(location)
                 .build();
-        order.setId(dto.getOrderId());
-        return order;
     }
 
     @Override
     public OrderDto convertModelToDto(Order model) {
         return OrderDto.builder()
-                .address(model.getAddress())
+                .country(model.getAddress().getCountry())
+                .county(model.getAddress().getCounty())
+                .streetAddress(model.getAddress().getStreetAddress())
+                .city(model.getAddress().getCity())
                 .orderId(model.getId())
                 .createdAt(model.getCreatedAt())
                 .shippedFromId(model.getShippedFrom().getId())

@@ -16,17 +16,17 @@ public class ProductConverter implements BaseConverter<Product, ProductDto> {
 
     @Override
     public Product convertDtoToModel(ProductDto dto) {
-        Supplier supplier = Supplier.builder().build();
-        supplier.setId(dto.getSupplierId());
-        Product product = Product.builder().productCategory(productCategoryDtoConverter.convertDtoToModel(dto.getProductCategory()))
+        return Product.builder().productCategory(productCategoryDtoConverter.convertDtoToModel(dto.getProductCategory()))
+                .id(dto.getProductId())
                 .description(dto.getDescription())
                 .name(dto.getName())
                 .price(dto.getPrice())
                 .weight(dto.getWeight())
-                .supplier(supplier)
+                .supplier(Supplier
+                        .builder()
+                        .id(dto.getSupplierId())
+                        .build())
                 .imageUrl(dto.getImageUrl()).build();
-        product.setId(dto.getProductId());
-        return product;
     }
 
     @Override

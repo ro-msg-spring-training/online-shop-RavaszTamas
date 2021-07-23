@@ -1,13 +1,13 @@
 package ro.msg.learning.shop.repository;
 
-import ro.msg.learning.shop.domain.Location;
+import ro.msg.learning.shop.domain.Product;
 import ro.msg.learning.shop.domain.Stock;
 
-import java.util.List;
+import java.util.Optional;
 
 
 public interface StockRepository extends Repository<Stock, Long> {
 
-    List<Stock> findByLocation(Location location);
+    Optional<Stock> findTopByProductAndQuantityGreaterThanEqualOrderByQuantityDesc(Product product, Integer quantity);
 
 }

@@ -8,12 +8,11 @@ import ro.msg.learning.shop.dto.ProductCategoryDto;
 public class ProductCategoryConverter implements BaseConverter<ProductCategory, ProductCategoryDto> {
     @Override
     public ProductCategory convertDtoToModel(ProductCategoryDto dto) {
-        ProductCategory productCategory = ProductCategory.builder()
+        return ProductCategory.builder()
                 .description(dto.getDescription())
                 .name(dto.getName())
+                .id(dto.getProductCategoryId())
                 .build();
-        productCategory.setId(dto.getProductCategoryId());
-        return productCategory;
     }
 
     @Override

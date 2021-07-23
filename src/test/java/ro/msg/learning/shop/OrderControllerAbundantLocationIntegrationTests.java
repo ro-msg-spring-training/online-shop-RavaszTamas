@@ -16,11 +16,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.util.NestedServletException;
-import ro.msg.learning.shop.domain.Address;
 import ro.msg.learning.shop.domain.Customer;
 import ro.msg.learning.shop.domain.Product;
 import ro.msg.learning.shop.dto.OrderRequestDto;
-import ro.msg.learning.shop.dto.ProductIdWithQuantity;
+import ro.msg.learning.shop.dto.ProductIdWithQuantityDto;
 import ro.msg.learning.shop.exceptions.OrderException;
 import ro.msg.learning.shop.repository.*;
 import ro.msg.learning.shop.service.OrderService;
@@ -88,22 +87,18 @@ public class OrderControllerAbundantLocationIntegrationTests {
         Optional<Customer> customer = customerRepository.findAll().stream().findFirst();
         List<Product> productList = productRepository.findAll();
         if (customer.isPresent()) {
-            List<ProductIdWithQuantity> requested = productList.stream()
+            List<ProductIdWithQuantityDto> requested = productList.stream()
                     .filter(item -> item.getName().equals("Product 1") || item.getName().equals("Product 2"))
-//                    .filter(item -> item.getName().equals("Product 1"))
-                    .map(item -> ProductIdWithQuantity.builder().productId(item.getId()).quantity(10).build())
+                    .map(item -> ProductIdWithQuantityDto.builder().productId(item.getId()).quantity(10).build())
                     .collect(Collectors.toList());
 
             mvc.perform(MockMvcRequestBuilders.post("/orders")
                     .content(asJsonString(OrderRequestDto
                             .builder()
-                            .address(Address
-                                    .builder()
-                                    .streetAddress("AnAddress 1")
-                                    .city("Cluj")
-                                    .county("Cluj")
-                                    .country("RO")
-                                    .build())
+                            .streetAddress("AnAddress 1")
+                            .city("Cluj")
+                            .county("Cluj")
+                            .country("RO")
                             .customerId(customer.get().getId())
                             .timestamp(new Timestamp(System.currentTimeMillis()))
                             .orderedItems(requested)
@@ -127,21 +122,18 @@ public class OrderControllerAbundantLocationIntegrationTests {
         Optional<Customer> customer = customerRepository.findAll().stream().findFirst();
         List<Product> productList = productRepository.findAll();
         if (customer.isPresent()) {
-            List<ProductIdWithQuantity> requested = productList.stream()
+            List<ProductIdWithQuantityDto> requested = productList.stream()
                     .filter(item -> item.getName().equals("Product 1") || item.getName().equals("Product 5"))
-                    .map(item -> ProductIdWithQuantity.builder().productId(item.getId()).quantity(10).build())
+                    .map(item -> ProductIdWithQuantityDto.builder().productId(item.getId()).quantity(10).build())
                     .collect(Collectors.toList());
 
             mvc.perform(MockMvcRequestBuilders.post("/orders")
                     .content(asJsonString(OrderRequestDto
                             .builder()
-                            .address(Address
-                                    .builder()
-                                    .streetAddress("AnAddress 1")
-                                    .city("Cluj")
-                                    .county("Cluj")
-                                    .country("RO")
-                                    .build())
+                            .streetAddress("AnAddress 1")
+                            .city("Cluj")
+                            .county("Cluj")
+                            .country("RO")
                             .customerId(customer.get().getId())
                             .timestamp(new Timestamp(System.currentTimeMillis()))
                             .orderedItems(requested)

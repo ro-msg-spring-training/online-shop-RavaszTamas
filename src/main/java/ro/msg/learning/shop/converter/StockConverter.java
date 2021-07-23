@@ -10,13 +10,9 @@ import ro.msg.learning.shop.dto.StockDto;
 public class StockConverter implements BaseConverter<Stock, StockDto> {
     @Override
     public Stock convertDtoToModel(StockDto dto) {
-        Location location = Location.builder().build();
-        Product product = Product.builder().build();
-        location.setId(dto.getLocationId());
-        product.setId(dto.getProductId());
-        Stock stock = Stock.builder().quantity(dto.getQuantity()).location(location).product(product).build();
-        stock.setId(stock.getId());
-        return stock;
+        Location location = Location.builder().id(dto.getLocationId()).build();
+        Product product = Product.builder().id(dto.getProductId()).build();
+        return Stock.builder().id(dto.getStockId()).quantity(dto.getQuantity()).location(location).product(product).build();
     }
 
     @Override
