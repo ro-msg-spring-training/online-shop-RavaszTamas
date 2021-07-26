@@ -10,9 +10,8 @@ import lombok.*;
 @Builder
 public class StockDto {
 
-    private Long stockId;
-    private Long productId;
-    private Long locationId;
-    private Integer quantity;
-
+  private Long stockId;
+  private Long productId;
+  private Long locationId;
+  private Integer quantity;
 }

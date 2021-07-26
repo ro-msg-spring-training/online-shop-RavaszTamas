@@ -7,13 +7,13 @@ import java.util.List;
 
 @Service
 public interface ProductService {
-    List<Product> findAll();
+  List<Product> findAll();
 
-    Product findById(Long productId);
+  Product findById(Long productId);
 
-    Product addProduct(Product product);
+  Product addProduct(Product product);
 
-    Product deleteProduct(Long productId);
+  Product deleteProduct(Long productId);
 
-    Product updateProduct(Long productId, Product product);
+  Product updateProduct(Long productId, Product product);
 }

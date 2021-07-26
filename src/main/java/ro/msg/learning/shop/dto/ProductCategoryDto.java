@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 @Builder
 public class ProductCategoryDto {
-    private Long productCategoryId;
-    private String name;
-    private String description;
+  private Long productCategoryId;
+  private String name;
+  private String description;
 }

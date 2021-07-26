@@ -5,5 +5,5 @@ import ro.msg.learning.shop.domain.BaseEntity;
 
 import java.io.Serializable;
 
-public interface Repository<T extends BaseEntity<I>, I extends Serializable> extends JpaRepository<T, I> {
-}
+public interface Repository<T extends BaseEntity<I>, I extends Serializable>
+    extends JpaRepository<T, I> {}

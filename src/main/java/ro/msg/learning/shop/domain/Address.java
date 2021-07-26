@@ -15,12 +15,11 @@ import java.io.Serializable;
 @Builder
 public class Address implements Serializable {
 
-    private String country;
+  private String country;
 
-    private String city;
+  private String city;
 
-    private String county;
+  private String county;
 
-    private String streetAddress;
-
+  private String streetAddress;
 }

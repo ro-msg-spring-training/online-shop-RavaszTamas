@@ -21,69 +21,76 @@ import java.util.Optional;
 @AllArgsConstructor
 public class OrderServiceImplementation implements OrderService {
 
-    StockRepository stockRepository;
-    LocationRepository locationRepository;
-    OrderRepository orderRepository;
-    OrderDetailRepository orderDetailRepository;
-    Converter<Order, OrderDto> orderOrderDtoConverter;
+  StockRepository stockRepository;
+  LocationRepository locationRepository;
+  OrderRepository orderRepository;
+  OrderDetailRepository orderDetailRepository;
+  Converter<Order, OrderDto> orderOrderDtoConverter;
 
-    @Override
-    public List<StockToTake> searchForItemsByStrategy(OrderDeliveryStrategy strategy, OrderRequestDto orderRequestDto) {
+  @Override
+  public List<StockToTake> searchForItemsByStrategy(
+      OrderDeliveryStrategy strategy, OrderRequestDto orderRequestDto) {
 
-        return strategy.getListOfStocksToBeFound(orderRequestDto);
-    }
+    return strategy.getListOfStocksToBeFound(orderRequestDto);
+  }
 
-    @Override
-    public void adjustStock(List<StockToTake> resultingItems) {
+  @Override
+  public void adjustStock(List<StockToTake> resultingItems) {
 
-        resultingItems.forEach(item -> {
-            Optional<Stock> byId = stockRepository.findById(item.getStockId());
-            if (byId.isPresent()) {
-                Stock stock = byId.get();
-                stock.setQuantity(stock.getQuantity() - item.getQuantity());
-                stockRepository.save(stock);
-            } else
-                throw new ResourceNotFoundException("resource wasn't found!");
+    resultingItems.forEach(
+        item -> {
+          Optional<Stock> byId = stockRepository.findById(item.getStockId());
+          if (byId.isPresent()) {
+            Stock stock = byId.get();
+            stock.setQuantity(stock.getQuantity() - item.getQuantity());
+            stockRepository.save(stock);
+          } else throw new ResourceNotFoundException("resource wasn't found!");
         });
-    }
+  }
 
-    @Override
-    public Order addOrder(OrderRequestDto orderRequestDto, List<StockToTake> resultingItems) {
-        Customer customer = Customer.builder().build();
-        customer.setId(orderRequestDto.getCustomerId());
-        Location location = Location.builder().build();
-        location.setId(resultingItems.get(0).getLocation().getId());
-        Order order = Order.builder()
-                .address(Address.builder()
-                        .streetAddress(orderRequestDto.getStreetAddress())
-                        .county(orderRequestDto.getCounty())
-                        .country(orderRequestDto.getCountry())
-                        .city(orderRequestDto.getCity())
-                        .build())
-                .createdAt(orderRequestDto.getTimestamp().toLocalDateTime())
-                .customer(customer)
-                .shippedFrom(location)
-                .build();
-        Order savedOrder = orderRepository.save(order);
-        orderRequestDto.getOrderedItems().forEach(
-                orderedItem -> {
-                    Product product = Product.builder().build();
-                    product.setId(orderedItem.getProductId());
-                    OrderDetail newOrderDetail = OrderDetail.builder().order(savedOrder).product(product).quantity(orderedItem.getQuantity()).build();
-                    orderDetailRepository.save(newOrderDetail);
-                }
-        );
+  @Override
+  public Order addOrder(OrderRequestDto orderRequestDto, List<StockToTake> resultingItems) {
+    Customer customer = Customer.builder().build();
+    customer.setId(orderRequestDto.getCustomerId());
+    Location location = Location.builder().build();
+    location.setId(resultingItems.get(0).getLocation().getId());
+    Order order =
+        Order.builder()
+            .address(
+                Address.builder()
+                    .streetAddress(orderRequestDto.getStreetAddress())
+                    .county(orderRequestDto.getCounty())
+                    .country(orderRequestDto.getCountry())
+                    .city(orderRequestDto.getCity())
+                    .build())
+            .createdAt(orderRequestDto.getTimestamp().toLocalDateTime())
+            .customer(customer)
+            .shippedFrom(location)
+            .build();
+    Order savedOrder = orderRepository.save(order);
+    orderRequestDto
+        .getOrderedItems()
+        .forEach(
+            orderedItem -> {
+              Product product = Product.builder().build();
+              product.setId(orderedItem.getProductId());
+              OrderDetail newOrderDetail =
+                  OrderDetail.builder()
+                      .order(savedOrder)
+                      .product(product)
+                      .quantity(orderedItem.getQuantity())
+                      .build();
+              orderDetailRepository.save(newOrderDetail);
+            });
 
-        return savedOrder;
-    }
+    return savedOrder;
+  }
 
-    @Override
-    public Order createNewOrder(OrderDeliveryStrategy strategy, OrderRequestDto orderRequestDto) {
-        List<StockToTake> resultingItems = searchForItemsByStrategy(strategy, orderRequestDto);
-        Order newOrder = addOrder(orderRequestDto, resultingItems);
-        adjustStock(resultingItems);
-        return newOrder;
-    }
-
-
+  @Override
+  public Order createNewOrder(OrderDeliveryStrategy strategy, OrderRequestDto orderRequestDto) {
+    List<StockToTake> resultingItems = searchForItemsByStrategy(strategy, orderRequestDto);
+    Order newOrder = addOrder(orderRequestDto, resultingItems);
+    adjustStock(resultingItems);
+    return newOrder;
+  }
 }

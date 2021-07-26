@@ -17,49 +17,62 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SingleLocationOrderDelivery implements OrderDeliveryStrategy {
 
-    LocationRepository locationRepository;
+  LocationRepository locationRepository;
 
-    @Override
-    public List<StockToTake> getListOfStocksToBeFound(OrderRequestDto orderRequestDto) throws OrderException {
-        List<Location> locations = locationRepository.findAllWithStocks();
+  @Override
+  public List<StockToTake> getListOfStocksToBeFound(OrderRequestDto orderRequestDto)
+      throws OrderException {
+    List<Location> locations = locationRepository.findAllWithStocks();
 
-        Optional<Location> locationOptional = getLocationForRequest(orderRequestDto, locations);
+    Optional<Location> locationOptional = getLocationForRequest(orderRequestDto, locations);
 
-        if (locationOptional.isPresent()) {
-            Location foundLocation = locationOptional.get();
-            return orderRequestDto.getOrderedItems().stream().map(
-                    order -> getStockToTake(foundLocation, order)
-            ).collect(Collectors.toList());
-        }
-        throw new OrderException("No single location found!");
+    if (locationOptional.isPresent()) {
+      Location foundLocation = locationOptional.get();
+      return orderRequestDto.getOrderedItems().stream()
+          .map(order -> getStockToTake(foundLocation, order))
+          .collect(Collectors.toList());
     }
+    throw new OrderException("No single location found!");
+  }
 
-    private StockToTake getStockToTake(Location foundLocation, ProductIdWithQuantityDto order) {
-        Product product = Product.builder().build();
-        product.setId(order.getProductId());
-        Optional<Stock> stock = foundLocation.getStockList().stream().filter(i -> i.getProduct().getId()
-                .equals(order.getProductId())).findFirst();
-        if (stock.isPresent())
-            return StockToTake.builder().stockId(stock.get().getId()).location(foundLocation).product(product).quantity(order.getQuantity()).build();
-        throw new OrderException("No single location found!");
-    }
+  private StockToTake getStockToTake(Location foundLocation, ProductIdWithQuantityDto order) {
+    Product product = Product.builder().build();
+    product.setId(order.getProductId());
+    Optional<Stock> stock =
+        foundLocation.getStockList().stream()
+            .filter(i -> i.getProduct().getId().equals(order.getProductId()))
+            .findFirst();
+    if (stock.isPresent())
+      return StockToTake.builder()
+          .stockId(stock.get().getId())
+          .location(foundLocation)
+          .product(product)
+          .quantity(order.getQuantity())
+          .build();
+    throw new OrderException("No single location found!");
+  }
 
-    private Optional<Location> getLocationForRequest(OrderRequestDto orderRequestDto, List<Location> locations) {
-        return locations.stream().filter(location -> {
-            List<Stock> myStocks = location.getStockList();
-            for (var order : orderRequestDto.getOrderedItems()) {
-                Optional<Stock> stock = myStocks.stream()
+  private Optional<Location> getLocationForRequest(
+      OrderRequestDto orderRequestDto, List<Location> locations) {
+    return locations.stream()
+        .filter(
+            location -> {
+              List<Stock> myStocks = location.getStockList();
+              for (var order : orderRequestDto.getOrderedItems()) {
+                Optional<Stock> stock =
+                    myStocks.stream()
                         .filter(item -> item.getProduct().getId().equals(order.getProductId()))
                         .findFirst();
                 if (stock.isPresent()) {
-                    if (stock.get().getQuantity() < order.getQuantity()) {
-                        return false;
-                    }
-                } else {
+                  if (stock.get().getQuantity() < order.getQuantity()) {
                     return false;
+                  }
+                } else {
+                  return false;
                 }
-            }
-            return true;
-        }).findFirst();
-    }
+              }
+              return true;
+            })
+        .findFirst();
+  }
 }

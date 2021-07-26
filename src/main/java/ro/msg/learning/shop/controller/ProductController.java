@@ -15,31 +15,39 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductController {
 
-    private final ProductService productService;
-    private final BaseConverter<Product, ProductDto> productConverter;
+  private final ProductService productService;
+  private final BaseConverter<Product, ProductDto> productConverter;
 
-    @GetMapping
-    public ResponseEntity<List<ProductDto>> getProducts() {
-        return ResponseEntity.ok(productConverter.convertModelsToDtos(productService.findAll()));
-    }
+  @GetMapping
+  public ResponseEntity<List<ProductDto>> getProducts() {
+    return ResponseEntity.ok(productConverter.convertModelsToDtos(productService.findAll()));
+  }
 
-    @PostMapping
-    public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
-        return ResponseEntity.ok(productConverter.convertModelToDto(productService.addProduct(productConverter.convertDtoToModel(productDto))));
-    }
+  @PostMapping
+  public ResponseEntity<ProductDto> createProduct(@RequestBody ProductDto productDto) {
+    return ResponseEntity.ok(
+        productConverter.convertModelToDto(
+            productService.addProduct(productConverter.convertDtoToModel(productDto))));
+  }
 
-    @PutMapping("/{productId}")
-    public ResponseEntity<ProductDto> updateProduct(@PathVariable Long productId, @RequestBody ProductDto productDto) {
-        return ResponseEntity.ok(productConverter.convertModelToDto(productService.updateProduct(productId, productConverter.convertDtoToModel(productDto))));
-    }
+  @PutMapping("/{productId}")
+  public ResponseEntity<ProductDto> updateProduct(
+      @PathVariable Long productId, @RequestBody ProductDto productDto) {
+    return ResponseEntity.ok(
+        productConverter.convertModelToDto(
+            productService.updateProduct(
+                productId, productConverter.convertDtoToModel(productDto))));
+  }
 
-    @GetMapping("/{productId}")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId) {
-        return ResponseEntity.ok(productConverter.convertModelToDto(productService.findById(productId)));
-    }
+  @GetMapping("/{productId}")
+  public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId) {
+    return ResponseEntity.ok(
+        productConverter.convertModelToDto(productService.findById(productId)));
+  }
 
-    @DeleteMapping("/{productId}")
-    public ResponseEntity<ProductDto> deleteProduct(@PathVariable Long productId) {
-        return ResponseEntity.ok(productConverter.convertModelToDto(productService.deleteProduct(productId)));
-    }
+  @DeleteMapping("/{productId}")
+  public ResponseEntity<ProductDto> deleteProduct(@PathVariable Long productId) {
+    return ResponseEntity.ok(
+        productConverter.convertModelToDto(productService.deleteProduct(productId)));
+  }
 }

@@ -6,5 +6,5 @@ import ro.msg.learning.shop.domain.Order;
 
 @Service
 public interface EmailService {
-    void sendOrderConfirmationMessage(Customer customer, Order order);
+  void sendOrderConfirmationMessage(Customer customer, Order order);
 }

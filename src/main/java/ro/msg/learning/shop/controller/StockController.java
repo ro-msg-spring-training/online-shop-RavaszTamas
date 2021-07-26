@@ -16,13 +16,12 @@ import java.util.List;
 @AllArgsConstructor
 public class StockController {
 
-    private final StockService stockService;
+  private final StockService stockService;
 
-    private final BaseConverter<Stock, StockDto> stockDtoConverter;
+  private final BaseConverter<Stock, StockDto> stockDtoConverter;
 
-    @GetMapping
-    public List<StockDto> getAllStocks() {
-        return stockDtoConverter.convertModelsToDtos(stockService.getAllStocks());
-    }
-
+  @GetMapping
+  public List<StockDto> getAllStocks() {
+    return stockDtoConverter.convertModelsToDtos(stockService.getAllStocks());
+  }
 }

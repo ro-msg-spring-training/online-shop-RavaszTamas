@@ -1,0 +1,57 @@
+<JPAEDMMappingModel xmlns="http://www.apache.org/olingo/odata2/jpa/processor/api/model/mapping">
+    <PersistenceUnit name="salesorderprocessing">
+        <EDMSchemaNamespace>OrderProductProcessing</EDMSchemaNamespace>
+        <JPAEntityTypes>
+            <JPAEntityType name="Order">
+                <EDMEntityType>Order</EDMEntityType>
+                <EDMEntitySet>Orders</EDMEntitySet>
+                <JPAAttributes>
+                    <JPAAttribute name="id">ID</JPAAttribute>
+                    <JPAAttribute name="address">Address</JPAAttribute>
+                </JPAAttributes>
+                <JPARelationships>
+                    <JPARelationship name="shippedFrom">ShippedFromDetails</JPARelationship>
+                    <JPARelationship name="customer">CustomerDetails</JPARelationship>
+                </JPARelationships>
+            </JPAEntityType>
+            <JPAEntityType name="OrderDetail">
+                <EDMEntityType>OrderDetail</EDMEntityType>
+                <EDMEntitySet>OrderDetails</EDMEntitySet>
+                <JPAAttributes>
+                    <JPAAttribute name="id">ID</JPAAttribute>
+                    <JPAAttribute name="quantity">Quantity</JPAAttribute>
+                </JPAAttributes>
+                <JPARelationships>
+                    <JPARelationship name="product">ProductDetails</JPARelationship>
+                    <JPARelationship name="order">OrderDetails</JPARelationship>
+                </JPARelationships>
+            </JPAEntityType>
+            <JPAEntityType name="Product">
+                <EDMEntityType>Product</EDMEntityType>
+                <EDMEntitySet>Products</EDMEntitySet>
+                <JPAAttributes>
+                    <JPAAttribute name="name">Name</JPAAttribute>
+                    <JPAAttribute name="description">Description</JPAAttribute>
+                    <JPAAttribute name="imageUrl">ImageUrl</JPAAttribute>
+                    <JPAAttribute name="weight">Weight</JPAAttribute>
+                    <JPAAttribute name="price">Price</JPAAttribute>
+                </JPAAttributes>
+                <JPARelationships>
+                    <JPARelationship name="productCategory">ProductCategory</JPARelationship>
+                    <JPARelationship name="supplier">Supplier</JPARelationship>
+                </JPARelationships>
+            </JPAEntityType>
+        </JPAEntityTypes>
+        <JPAEmbeddableTypes>
+            <JPAEmbeddableType name="Address">
+                <EDMComplexType>Address</EDMComplexType>
+                <JPAAttributes>
+                    <JPAAttribute name="country">Country</JPAAttribute>
+                    <JPAAttribute name="county">County</JPAAttribute>
+                    <JPAAttribute name="city">City</JPAAttribute>
+                    <JPAAttribute name="streetAddress">StreetAddress</JPAAttribute>
+                </JPAAttributes>
+            </JPAEmbeddableType>
+        </JPAEmbeddableTypes>
+    </PersistenceUnit>
+</JPAEDMMappingModel>

@@ -9,6 +9,6 @@ import lombok.*;
 @ToString
 @Builder
 public class ProductIdWithQuantityDto {
-    private Long productId;
-    private Integer quantity;
+  private Long productId;
+  private Integer quantity;
 }

@@ -18,16 +18,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class OrderDetail extends BaseEntity<Long> {
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "ORDER_ID")
-    private Order order;
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "ORDER_ID")
+  private Order order;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "PRODUCT_ID")
-    private Product product;
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "PRODUCT_ID")
+  private Product product;
 
-    @Column(name = "QUANTITY")
-    private Integer quantity;
-
-
+  @Column(name = "QUANTITY")
+  private Integer quantity;
 }

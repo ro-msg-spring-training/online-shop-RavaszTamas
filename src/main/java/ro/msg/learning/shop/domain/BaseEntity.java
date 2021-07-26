@@ -18,7 +18,5 @@ import java.io.Serializable;
 @Setter
 @SuperBuilder
 public class BaseEntity<I extends Serializable> implements Serializable {
-    @Id
-    @GeneratedValue
-    protected I id;
+  @Id @GeneratedValue protected I id;
 }

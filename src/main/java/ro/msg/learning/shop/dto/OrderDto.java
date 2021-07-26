@@ -12,13 +12,12 @@ import java.time.LocalDateTime;
 @Builder
 public class OrderDto {
 
-    private Long orderId;
-    private Long shippedFromId;
-    private Long customerId;
-    private LocalDateTime createdAt;
-    private String country;
-    private String county;
-    private String streetAddress;
-    private String city;
-
+  private Long orderId;
+  private Long shippedFromId;
+  private Long customerId;
+  private LocalDateTime createdAt;
+  private String country;
+  private String county;
+  private String streetAddress;
+  private String city;
 }

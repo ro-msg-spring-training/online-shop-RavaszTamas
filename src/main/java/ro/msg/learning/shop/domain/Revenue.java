@@ -20,13 +20,13 @@ import java.time.LocalDate;
 @AttributeOverride(name = "id", column = @Column(name = "REVENUE_ID"))
 public class Revenue extends BaseEntity<Long> {
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "LOCATION_ID")
-    private Location location;
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "LOCATION_ID")
+  private Location location;
 
-    @Column(name = "DATE_RECORDED")
-    private LocalDate date;
+  @Column(name = "DATE_RECORDED")
+  private LocalDate date;
 
-    @Column(name = "CALCULATED_SUM")
-    private BigDecimal sum;
+  @Column(name = "CALCULATED_SUM")
+  private BigDecimal sum;
 }

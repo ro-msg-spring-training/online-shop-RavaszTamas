@@ -4,8 +4,7 @@ import ro.msg.learning.shop.domain.BaseEntity;
 
 public interface Converter<M extends BaseEntity<Long>, D> {
 
-    M convertDtoToModel(D dto);
+  M convertDtoToModel(D dto);
 
-    D convertModelToDto(M model);
-
+  D convertModelToDto(M model);
 }

@@ -8,5 +8,5 @@ import java.util.List;
 @Service
 public interface StockService {
 
-    List<Stock> getAllStocks();
+  List<Stock> getAllStocks();
 }

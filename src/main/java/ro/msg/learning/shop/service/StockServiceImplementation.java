@@ -10,11 +10,10 @@ import java.util.List;
 @Service
 public class StockServiceImplementation implements StockService {
 
-    @Autowired
-    StockRepository stockRepository;
+  @Autowired StockRepository stockRepository;
 
-    @Override
-    public List<Stock> getAllStocks() {
-        return stockRepository.findAll();
-    }
+  @Override
+  public List<Stock> getAllStocks() {
+    return stockRepository.findAll();
+  }
 }

@@ -7,7 +7,6 @@ import ro.msg.learning.shop.domain.Product;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 
-
 @Data
 @Getter
 @Setter
@@ -17,12 +16,11 @@ import javax.persistence.Column;
 @Builder
 public class StockToTake {
 
-    private Long stockId;
+  private Long stockId;
 
-    private Product product;
+  private Product product;
 
-    private Location location;
+  private Location location;
 
-    private Integer quantity;
-
+  private Integer quantity;
 }

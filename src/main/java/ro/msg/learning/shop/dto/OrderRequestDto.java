@@ -5,7 +5,6 @@ import lombok.*;
 import java.sql.Timestamp;
 import java.util.List;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -13,11 +12,11 @@ import java.util.List;
 @ToString(exclude = {"orderedItems"})
 @Builder
 public class OrderRequestDto {
-    private Timestamp timestamp;
-    private Long customerId;
-    private String country;
-    private String county;
-    private String streetAddress;
-    private String city;
-    private List<ProductIdWithQuantityDto> orderedItems;
+  private Timestamp timestamp;
+  private Long customerId;
+  private String country;
+  private String county;
+  private String streetAddress;
+  private String city;
+  private List<ProductIdWithQuantityDto> orderedItems;
 }

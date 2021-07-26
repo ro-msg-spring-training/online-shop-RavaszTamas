@@ -10,12 +10,12 @@ import java.util.List;
 
 @Service
 public interface OrderService {
-    List<StockToTake> searchForItemsByStrategy(OrderDeliveryStrategy strategy, OrderRequestDto orderRequestDto);
+  List<StockToTake> searchForItemsByStrategy(
+      OrderDeliveryStrategy strategy, OrderRequestDto orderRequestDto);
 
-    void adjustStock(List<StockToTake> resultingItems);
+  void adjustStock(List<StockToTake> resultingItems);
 
+  Order addOrder(OrderRequestDto orderRequestDto, List<StockToTake> resultingItems);
 
-    Order addOrder(OrderRequestDto orderRequestDto, List<StockToTake> resultingItems);
-
-    Order createNewOrder(OrderDeliveryStrategy strategy, OrderRequestDto orderRequestDto);
+  Order createNewOrder(OrderDeliveryStrategy strategy, OrderRequestDto orderRequestDto);
 }
